@@ -18,15 +18,35 @@ contract PriceConsumerV3 {
     /**
      * Returns the latest price.
      */
-    function getLatestPrice() public view returns (int) {
+    function getLatestPrice() public view returns (int, uint80) {
         // prettier-ignore
         (
-            /* uint80 roundID */,
+            uint80 roundID,
             int price,
             /*uint startedAt*/,
             /*uint timeStamp*/,
             /*uint80 answeredInRound*/
         ) = priceFeed.latestRoundData();
+        return (price, roundID);
+    }
+
+    /**
+     * Returns historical price for a round id.
+     * roundId is NOT incremental. Not all roundIds are valid.
+     * You must know a valid roundId before consuming historical data.
+     *
+     * @dev A timestamp with zero value means the round is not complete and should not be used.
+     */
+    function getHistoricalPrice(uint80 _roundId) public view returns (int256) {
+        // prettier-ignore
+        (
+            /*uint80 roundID*/,
+            int price,
+            /*uint startedAt*/,
+            uint timeStamp,
+            /*uint80 answeredInRound*/
+        ) = priceFeed.getRoundData(_roundId);
+        require(timeStamp > 0, "Round not complete");
         return price;
     }
 }
