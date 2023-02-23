@@ -64,11 +64,11 @@ const deployPriceConsumerV3: DeployFunction = async (
 
     console.log(`First Round ID is: ${firstRoundId}`);
 
-    for (let i = currentAggregatorRoundId; i >= firstRoundId.toNumber(); i--) {
-        const historicalPrice =
-            await priceConsumerV3Contract.getHistoricalPrice(i);
-        console.log(`Historical Price is: ${historicalPrice}`);
-    }
+    // for (let i = currentAggregatorRoundId; i >= firstRoundId.toNumber(); i--) {
+    //     const historicalPrice =
+    //         await priceConsumerV3Contract.getHistoricalPrice(i);
+    //     console.log(`Historical Price is: ${historicalPrice}`);
+    // }
 };
 
 export default deployPriceConsumerV3;
