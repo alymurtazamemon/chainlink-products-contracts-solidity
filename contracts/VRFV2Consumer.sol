@@ -6,15 +6,15 @@ import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
 contract VRFv2Consumer is VRFConsumerBaseV2, ConfirmedOwner {
-    VRFCoordinatorV2Interface private immutable i_vrfCoordinatorV2;
+    VRFCoordinatorV2Interface private s_vrfCoordinatorV2;
     uint16 private constant REQUEST_CONFIRMATIONS = 3;
     uint32 private constant NUM_WORDS = 1;
-    uint32 private immutable i_callbackGasLimit;
-    uint64 private immutable i_subscriptionId;
+    uint32 private s_callbackGasLimit;
+    uint64 private s_subscriptionId;
     uint256[] private s_requestIds;
     uint256 private s_lastRequestId;
 
-    bytes32 private immutable i_gasLane;
+    bytes32 private s_gasLane;
 
     struct RequestStatus {
         bool fulfilled; // whether the request has been successfully fulfilled
@@ -38,10 +38,10 @@ contract VRFv2Consumer is VRFConsumerBaseV2, ConfirmedOwner {
         uint32 callbackGasLimit,
         bytes32 gasLane
     ) VRFConsumerBaseV2(vrfCoordinatorV2Address) ConfirmedOwner(msg.sender) {
-        i_vrfCoordinatorV2 = VRFCoordinatorV2Interface(vrfCoordinatorV2Address);
-        i_subscriptionId = subscriptionId;
-        i_callbackGasLimit = callbackGasLimit;
-        i_gasLane = gasLane;
+        s_vrfCoordinatorV2 = VRFCoordinatorV2Interface(vrfCoordinatorV2Address);
+        s_subscriptionId = subscriptionId;
+        s_callbackGasLimit = callbackGasLimit;
+        s_gasLane = gasLane;
     }
 
     // Assumes the subscription is funded sufficiently.
@@ -51,11 +51,11 @@ contract VRFv2Consumer is VRFConsumerBaseV2, ConfirmedOwner {
         returns (uint256 requestId)
     {
         // Will revert if subscription is not set and funded.
-        requestId = i_vrfCoordinatorV2.requestRandomWords(
-            i_gasLane,
-            i_subscriptionId,
+        requestId = s_vrfCoordinatorV2.requestRandomWords(
+            s_gasLane,
+            s_subscriptionId,
             REQUEST_CONFIRMATIONS,
-            i_callbackGasLimit,
+            s_callbackGasLimit,
             NUM_WORDS
         );
         s_requests[requestId] = RequestStatus({
@@ -79,6 +79,28 @@ contract VRFv2Consumer is VRFConsumerBaseV2, ConfirmedOwner {
         emit RequestFulfilled(_requestId, _randomWords);
     }
 
+    function updateVRFV2CoordinatorAddress(
+        address newVRFV2CoordinatorAddress
+    ) external {
+        s_vrfCoordinatorV2 = VRFCoordinatorV2Interface(
+            newVRFV2CoordinatorAddress
+        );
+    }
+
+    function updateSubscriptionId(uint64 newSubscriptionId) external {
+        s_subscriptionId = newSubscriptionId;
+    }
+
+    function update(uint32 newCallbackGasLimit) external {
+        s_callbackGasLimit = newCallbackGasLimit;
+    }
+
+    function update(bytes32 newGasLane) external {
+        s_gasLane = newGasLane;
+    }
+
+    // * View & Pure functions
+
     function getRequestStatus(
         uint256 _requestId
     ) external view returns (bool fulfilled, uint256[] memory randomWords) {
@@ -87,13 +109,12 @@ contract VRFv2Consumer is VRFConsumerBaseV2, ConfirmedOwner {
         return (request.fulfilled, request.randomWords);
     }
 
-    // * View & Pure functions
     function getVRFCoordinatorV2Address() external view returns (address) {
-        return address(i_vrfCoordinatorV2);
+        return address(s_vrfCoordinatorV2);
     }
 
     function getCallbackGasLimit() external view returns (uint256) {
-        return i_callbackGasLimit;
+        return s_callbackGasLimit;
     }
 
     function getRequestIds() external view returns (uint256[] memory) {
