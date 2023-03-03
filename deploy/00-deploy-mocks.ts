@@ -10,20 +10,29 @@ import { developmentChains } from "../helper-hardhat-config";
  *
  */
 
+// * MockV3Aggregator - Constructor Values
 const DECIMALS = 8;
-const INITIAL_ANSWER = ethers.utils.parseEther("1700");
+const INITIAL_ANSWER = ethers.utils.parseEther("1700"); // 1700 ETH
+
+// * VRFCoordinatorV2Mock - Constructor Values
+const BASE_FEE = "250000000000000000"; // 0.25 LINK;
+const GAS_PRICE_LINK = 1e9; // 0.000000001 LINK per gas
 
 const deployMocks: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     const { deploy } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
 
-    const args: any[] = [DECIMALS, INITIAL_ANSWER];
-
-    const mockV3Aggregator: DeployResult = await deploy("MockV3Aggregator", {
+    await deploy("MockV3Aggregator", {
         from: deployer,
         log: true,
-        args: args,
+        args: [DECIMALS, INITIAL_ANSWER],
         waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
+    });
+
+    await deploy("VRFCoordinatorV2Mock", {
+        from: deployer,
+        log: true,
+        args: [BASE_FEE, GAS_PRICE_LINK],
     });
 };
 
