@@ -2,12 +2,8 @@ import { DeployFunction, DeployResult } from "hardhat-deploy/dist/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { ethers, network } from "hardhat";
 import { developmentChains, networkConfig } from "../helper-hardhat-config";
-import {
-    VRFCoordinatorV2Interface,
-    VRFCoordinatorV2Mock,
-    VRFv2Consumer,
-} from "../typechain-types";
-import { BigNumber, ContractTransaction } from "ethers";
+import { VRFCoordinatorV2Mock } from "../typechain-types";
+import { ContractTransaction } from "ethers";
 
 /**
  * * Important Notes

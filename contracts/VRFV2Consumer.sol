@@ -86,4 +86,29 @@ contract VRFv2Consumer is VRFConsumerBaseV2, ConfirmedOwner {
         RequestStatus memory request = s_requests[_requestId];
         return (request.fulfilled, request.randomWords);
     }
+
+    // * View & Pure functions
+    function getVRFCoordinatorV2Address() external view returns (address) {
+        return address(i_vrfCoordinatorV2);
+    }
+
+    function getCallbackGasLimit() external view returns (uint256) {
+        return i_callbackGasLimit;
+    }
+
+    function getRequestIds() external view returns (uint256[] memory) {
+        return s_requestIds;
+    }
+
+    function getLastRequestId() external view returns (uint256) {
+        return s_lastRequestId;
+    }
+
+    function getNumWords() external pure returns (uint256) {
+        return NUM_WORDS;
+    }
+
+    function getRequiredConfirmations() external pure returns (uint256) {
+        return REQUEST_CONFIRMATIONS;
+    }
 }

@@ -21,19 +21,22 @@ const GAS_PRICE_LINK = 1e9; // 0.000000001 LINK per gas
 const deployMocks: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     const { deploy } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
+    const chainId = network.config.chainId!;
 
-    await deploy("MockV3Aggregator", {
-        from: deployer,
-        log: true,
-        args: [DECIMALS, INITIAL_ANSWER],
-        waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
-    });
+    if (chainId == 31337) {
+        await deploy("MockV3Aggregator", {
+            from: deployer,
+            log: true,
+            args: [DECIMALS, INITIAL_ANSWER],
+            waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
+        });
 
-    await deploy("VRFCoordinatorV2Mock", {
-        from: deployer,
-        log: true,
-        args: [BASE_FEE, GAS_PRICE_LINK],
-    });
+        await deploy("VRFCoordinatorV2Mock", {
+            from: deployer,
+            log: true,
+            args: [BASE_FEE, GAS_PRICE_LINK],
+        });
+    }
 };
 
 export default deployMocks;
