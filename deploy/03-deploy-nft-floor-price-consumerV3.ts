@@ -43,18 +43,20 @@ const deployNFTFloorPriceConsumerV3: DeployFunction = async (
         }
     );
 
-    const nftFloorPriceConsumerV3Contract: NFTFloorPriceConsumerV3 =
-        await ethers.getContractAt(
-            "NFTFloorPriceConsumerV3",
-            nftFloorPriceConsumerV3.address
+    if (chainId == 31337) {
+        const nftFloorPriceConsumerV3Contract: NFTFloorPriceConsumerV3 =
+            await ethers.getContractAt(
+                "NFTFloorPriceConsumerV3",
+                nftFloorPriceConsumerV3.address
+            );
+
+        const latestFloorPrice =
+            await nftFloorPriceConsumerV3Contract.getLatestPrice();
+
+        console.log(
+            `Latest Floor Price of CryptoPunks Collection is: ${latestFloorPrice}`
         );
-
-    const latestFloorPrice =
-        await nftFloorPriceConsumerV3Contract.getLatestPrice();
-
-    console.log(
-        `Latest Floor Price of CryptoPunks Collection is: ${latestFloorPrice}`
-    );
+    }
 };
 
 export default deployNFTFloorPriceConsumerV3;
