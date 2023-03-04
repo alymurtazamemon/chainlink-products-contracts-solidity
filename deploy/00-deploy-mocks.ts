@@ -1,7 +1,7 @@
 import { DeployFunction, DeployResult } from "hardhat-deploy/dist/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { ethers, network } from "hardhat";
-import { developmentChains } from "../helper-hardhat-config";
+import { developmentChains, networkConfig } from "../helper-hardhat-config";
 
 /**
  * * Important Notes
@@ -24,17 +24,29 @@ const deployMocks: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     const chainId = network.config.chainId!;
 
     if (chainId == 31337) {
-        await deploy("MockV3Aggregator", {
+        const mockV3Aggregator = await deploy("MockV3Aggregator", {
             from: deployer,
             log: true,
             args: [DECIMALS, INITIAL_ANSWER],
             waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
         });
 
-        await deploy("VRFCoordinatorV2Mock", {
+        const vrfCoordinatorV2Mock = await deploy("VRFCoordinatorV2Mock", {
             from: deployer,
             log: true,
             args: [BASE_FEE, GAS_PRICE_LINK],
+            waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
+        });
+
+        await deploy("VRFV2Wrapper", {
+            from: deployer,
+            log: true,
+            args: [
+                networkConfig[chainId]["linkTokenAddress"],
+                mockV3Aggregator.address,
+                vrfCoordinatorV2Mock.address,
+            ],
+            waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
         });
     }
 };
