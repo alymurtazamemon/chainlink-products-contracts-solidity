@@ -38,15 +38,18 @@ const deployReserveConsumerV3: DeployFunction = async (
         waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
     });
 
-    const reserveConsumerV3Contract: ReserveConsumerV3 =
-        await ethers.getContractAt(
-            "ReserveConsumerV3",
-            reserveConsumerV3.address
-        );
+    if (chainId == 31337) {
+        const reserveConsumerV3Contract: ReserveConsumerV3 =
+            await ethers.getContractAt(
+                "ReserveConsumerV3",
+                reserveConsumerV3.address
+            );
 
-    const latestReserve = await reserveConsumerV3Contract.getLatestReserve();
+        const latestReserve =
+            await reserveConsumerV3Contract.getLatestReserve();
 
-    console.log(`Latest Reserve of Stader Labs PoR is: ${latestReserve}`);
+        console.log(`Latest Reserve of Stader Labs PoR is: ${latestReserve}`);
+    }
 };
 
 export default deployReserveConsumerV3;
