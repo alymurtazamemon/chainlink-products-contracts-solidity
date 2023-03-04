@@ -11,6 +11,7 @@ import { ContractTransaction } from "ethers";
  * * In order to run `npx hardhat deploy --typecheck` command we need to add `import hardhat-deploy` in `hardhat.config.js` file.
  *
  */
+const FUND_AMOUNT = ethers.utils.parseEther("10");
 
 const deployVRFV2DirectFundingConsumer: DeployFunction = async (
     hre: HardhatRuntimeEnvironment
@@ -46,6 +47,28 @@ const deployVRFV2DirectFundingConsumer: DeployFunction = async (
             waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
         }
     );
+
+    if (chainId == 31337) {
+        const vrfV2DirectFundingConsumerContract = await ethers.getContract(
+            "VRFv2DirectFundingConsumer",
+            deployer
+        );
+
+        const signers = await ethers.getSigners();
+
+        console.log(`Funding the contract...`);
+        await signers[0].sendTransaction({
+            to: vrfV2DirectFundingConsumerContract.address,
+            value: FUND_AMOUNT,
+        });
+        console.log(`Funded the contract.`);
+
+        console.log(
+            `Current Balance of VRFv2DirectFundingConsumer Contract is: ${await ethers.provider.getBalance(
+                vrfV2DirectFundingConsumer.address
+            )}`
+        );
+    }
 };
 
 export default deployVRFV2DirectFundingConsumer;

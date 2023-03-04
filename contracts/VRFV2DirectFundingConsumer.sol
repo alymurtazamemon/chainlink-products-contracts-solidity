@@ -99,4 +99,8 @@ contract VRFv2DirectFundingConsumer is
             "Unable to transfer"
         );
     }
+
+    fallback() external payable {}
+
+    receive() external payable {}
 }
