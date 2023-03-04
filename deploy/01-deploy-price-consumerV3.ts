@@ -39,36 +39,45 @@ const deployPriceConsumerV3: DeployFunction = async (
         waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
     });
 
-    const priceConsumerV3Contract: PriceConsumerV3 = await ethers.getContractAt(
-        "PriceConsumerV3",
-        priceConsumerV3.address
-    );
+    if (chainId == 31337) {
+        const priceConsumerV3Contract: PriceConsumerV3 =
+            await ethers.getContractAt(
+                "PriceConsumerV3",
+                priceConsumerV3.address
+            );
 
-    const [latestPrice, latestRoundId] =
-        await priceConsumerV3Contract.getLatestPrice();
+        const [latestPrice, latestRoundId] =
+            await priceConsumerV3Contract.getLatestPrice();
 
-    console.log(`Latest ETH/USD Price is: ${latestPrice}`);
-    console.log(`Latest Round ID is: ${latestRoundId}`);
+        console.log(`Latest ETH/USD Price is: ${latestPrice}`);
+        console.log(`Latest Round ID is: ${latestRoundId}`);
 
-    // * First parse to BigInt to perform computation with big integers
-    const num = BigInt(latestRoundId.toString());
-    const num2 = BigInt("0xFFFFFFFFFFFFFFFF"); // * Largest 64bits integer
+        // * First parse to BigInt to perform computation with big integers
+        const num = BigInt(latestRoundId.toString());
+        const num2 = BigInt("0xFFFFFFFFFFFFFFFF"); // * Largest 64bits integer
 
-    const phaseId = Number(num >> 64n); // * returns (phaseId)
-    const currentAggregatorRoundId = Number(num & num2); // * returns (aggregatorRoundId) . Use & (AND bitwise operator) which sets each bit to _1_ if both bits are _1_
+        const phaseId = Number(num >> 64n); // * returns (phaseId)
+        const currentAggregatorRoundId = Number(num & num2); // * returns (aggregatorRoundId) . Use & (AND bitwise operator) which sets each bit to _1_ if both bits are _1_
 
-    console.log(`Phase ID is: ${phaseId}`);
-    console.log(`Current Aggregator Round ID is: ${currentAggregatorRoundId}`);
+        console.log(`Phase ID is: ${phaseId}`);
+        console.log(
+            `Current Aggregator Round ID is: ${currentAggregatorRoundId}`
+        );
 
-    const firstRoundId = latestRoundId.sub(currentAggregatorRoundId).add(1);
+        const firstRoundId = latestRoundId.sub(currentAggregatorRoundId).add(1);
 
-    console.log(`First Round ID is: ${firstRoundId}`);
+        console.log(`First Round ID is: ${firstRoundId}`);
 
-    // for (let i = currentAggregatorRoundId; i >= firstRoundId.toNumber(); i--) {
-    //     const historicalPrice =
-    //         await priceConsumerV3Contract.getHistoricalPrice(i);
-    //     console.log(`Historical Price is: ${historicalPrice}`);
-    // }
+        for (
+            let i = currentAggregatorRoundId;
+            i >= firstRoundId.toNumber();
+            i--
+        ) {
+            const historicalPrice =
+                await priceConsumerV3Contract.getHistoricalPrice(i);
+            console.log(`Historical Price is: ${historicalPrice}`);
+        }
+    }
 };
 
 export default deployPriceConsumerV3;
