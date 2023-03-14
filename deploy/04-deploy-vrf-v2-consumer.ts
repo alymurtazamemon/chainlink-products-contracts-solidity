@@ -17,6 +17,9 @@ const FUND_AMOUNT = ethers.utils.parseEther("1");
 const deployVRFV2Consumer: DeployFunction = async (
     hre: HardhatRuntimeEnvironment
 ) => {
+    console.log(
+        "\n--------------------- Deploying VRF V2 Consumer ---------------------\n"
+    );
     const { deploy } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
     const chainId = network.config.chainId!;

@@ -14,6 +14,9 @@ import { PriceConsumerV3 } from "../typechain-types";
 const deployPriceConsumerV3: DeployFunction = async (
     hre: HardhatRuntimeEnvironment
 ) => {
+    console.log(
+        "\n--------------------- Deploying Price Consumer V3 ---------------------\n"
+    );
     const { deploy } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
     const chainId = network.config.chainId!;

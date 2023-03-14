@@ -14,6 +14,9 @@ import { NFTFloorPriceConsumerV3 } from "../typechain-types";
 const deployNFTFloorPriceConsumerV3: DeployFunction = async (
     hre: HardhatRuntimeEnvironment
 ) => {
+    console.log(
+        "\n--------------------- Deploying NFT Floor Price Consumer V3 ---------------------\n"
+    );
     const { deploy } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
     const chainId = network.config.chainId!;

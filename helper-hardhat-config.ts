@@ -9,6 +9,7 @@ export interface networkConfigItem {
     callbackGasLimit: string;
     linkTokenAddress: string;
     vrfWrapperAddress?: string;
+    interval: number;
 }
 
 export interface networkConfigInfo {
@@ -22,6 +23,7 @@ export const networkConfig: networkConfigInfo = {
             "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
         callbackGasLimit: "500000",
         linkTokenAddress: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
+        interval: 60,
     },
     5: {
         name: "goerli",
@@ -35,6 +37,7 @@ export const networkConfig: networkConfigInfo = {
         callbackGasLimit: "500000",
         linkTokenAddress: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
         vrfWrapperAddress: "0x708701a1DfF4f478de54383E49a627eD4852C816",
+        interval: 60,
     },
 };
 

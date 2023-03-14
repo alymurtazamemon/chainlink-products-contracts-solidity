@@ -14,6 +14,9 @@ import { ReserveConsumerV3 } from "../typechain-types";
 const deployReserveConsumerV3: DeployFunction = async (
     hre: HardhatRuntimeEnvironment
 ) => {
+    console.log(
+        "\n--------------------- Deploying Reserve Consumer V3 ---------------------\n"
+    );
     const { deploy } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
     const chainId = network.config.chainId!;
