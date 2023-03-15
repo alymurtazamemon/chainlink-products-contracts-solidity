@@ -30,10 +30,10 @@ export const networkConfig: networkConfigInfo = {
             "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
         callbackGasLimit: "500000",
         linkTokenAddress: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
-        vrfWrapperAddress: "",
+        vrfWrapperAddress: "WILL MOCK IT ON TESTNETS",
         interval: 60,
-        oracleAddress: "",
-        jobId: "",
+        oracleAddress: "0xCC79157eb46F5624204f47AB42b3906cAA40eaB7",
+        jobId: "ca98366cc7314957b8c012c72f05aeeb",
     },
     5: {
         name: "goerli",
