@@ -19,6 +19,12 @@ const config: HardhatUserConfig = {
             accounts: [process.env.PRIVATE_KEY!],
             saveDeployments: true,
         },
+        sepolia: {
+            chainId: 11155111,
+            url: process.env.SEPOLIA_RPC_URL,
+            accounts: [process.env.PRIVATE_KEY!],
+            saveDeployments: true,
+        },
     },
     namedAccounts: {
         deployer: {
