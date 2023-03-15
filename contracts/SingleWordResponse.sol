@@ -37,7 +37,10 @@ contract SingleWordResponse is ChainlinkClient, ConfirmedOwner {
      * * Create a Chainlink request to retrieve API response, find the target
      * * data, then multiply by 1000000000000000000 (to remove decimal places from data).
      */
-    function requestVolumeData() public returns (bytes32 requestId) {
+    function requestData(
+        string memory url,
+        string memory path
+    ) public returns (bytes32 requestId) {
         Chainlink.Request memory req = buildChainlinkRequest(
             jobId,
             address(this),
@@ -45,13 +48,10 @@ contract SingleWordResponse is ChainlinkClient, ConfirmedOwner {
         );
 
         // * This add the parameter to tell the oracle node about the URL to fetch the data.
-        req.add(
-            "get",
-            "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=ETH&tsyms=USD"
-        );
+        req.add("get", url);
 
         // * This add the path parameter to tell the oracle node about the specific data we want to get.
-        req.add("path", "RAW,ETH,USD,VOLUME24HOUR");
+        req.add("path", path);
 
         // * Multiply the result by 1000000000000000000 to remove decimals
         int256 timesAmount = 10 ** 18;
