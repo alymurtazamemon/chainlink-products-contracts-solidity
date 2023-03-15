@@ -18,7 +18,7 @@ contract SingleWordResponse is ChainlinkClient, ConfirmedOwner {
      *
      * * Sepolia Testnet details:
      * * Link Token: 0x779877A7B0D9E8603169DdbD7836e478b4624789
-     * * Oracle: 0x6090149792dAAeE9D1D568c9f9a6F6B46AA29eFD (Chainlink DevRel)
+     * * Oracle: 0x6090149792dAAeE9D1D568c9f9a6F6B46AA29eFD
      * * jobId: ca98366cc7314957b8c012c72f05aeeb
      *
      */
