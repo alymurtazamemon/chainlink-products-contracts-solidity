@@ -3,6 +3,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { ethers, network } from "hardhat";
 import { developmentChains, networkConfig } from "../helper-hardhat-config";
 import { PriceConsumerV3 } from "../typechain-types";
+import verify from "../utils/verify";
 
 /**
  * * Important Notes
@@ -41,6 +42,14 @@ const deployPriceConsumerV3: DeployFunction = async (
         args: args,
         waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
     });
+
+    // * only verify on testnets or mainnets.
+    if (
+        !developmentChains.includes(network.name) &&
+        process.env.ETHERSCAN_API_KEY
+    ) {
+        await verify(priceConsumerV3.address, args);
+    }
 
     if (chainId == 31337) {
         const priceConsumerV3Contract: PriceConsumerV3 =

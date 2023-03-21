@@ -1,0 +1,120 @@
+{
+  "address": "0xDAC228D35a7741cEe1EE26CE46504d6F71242cA8",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_priceFeedAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint80",
+          "name": "_roundId",
+          "type": "uint80"
+        }
+      ],
+      "name": "getHistoricalPrice",
+      "outputs": [
+        {
+          "internalType": "int256",
+          "name": "",
+          "type": "int256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getLatestPrice",
+      "outputs": [
+        {
+          "internalType": "int256",
+          "name": "",
+          "type": "int256"
+        },
+        {
+          "internalType": "uint80",
+          "name": "",
+          "type": "uint80"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x64e2d61b0d52ae712819248097e9bbd0279a3bae41adbbf99ae37f173cf4c4da",
+  "receipt": {
+    "to": null,
+    "from": "0x1eF4C1db7c299c9B5248dA1FF8E4805fD6F4D4D1",
+    "contractAddress": "0xDAC228D35a7741cEe1EE26CE46504d6F71242cA8",
+    "transactionIndex": 10,
+    "gasUsed": "343166",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x8f493cb5720b4718abbe1c54a4bd04bf00d55c26579669e32c2b56266277c313",
+    "transactionHash": "0x64e2d61b0d52ae712819248097e9bbd0279a3bae41adbbf99ae37f173cf4c4da",
+    "logs": [],
+    "blockNumber": 3133564,
+    "cumulativeGasUsed": "904098",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x694AA1769357215DE4FAC081bf1f309aDC325306"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "b4d2fcfbed80419bdd45c26261da1bf4",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_priceFeedAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"uint80\",\"name\":\"_roundId\",\"type\":\"uint80\"}],\"name\":\"getHistoricalPrice\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLatestPrice\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"},{\"internalType\":\"uint80\",\"name\":\"\",\"type\":\"uint80\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"getHistoricalPrice(uint80)\":{\"details\":\"A timestamp with zero value means the round is not complete and should not be used.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"constructor\":{\"notice\":\"Network: Ethereum Goerli Aggregator: ETH/USD Address: 0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e\"},\"getHistoricalPrice(uint80)\":{\"notice\":\"Returns historical price for a round id. roundId is NOT incremental. Not all roundIds are valid. You must know a valid roundId before consuming historical data.\"},\"getLatestPrice()\":{\"notice\":\"Returns the latest price.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/PriceConsumerV3.sol\":\"PriceConsumerV3\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\ninterface AggregatorV3Interface {\\n  function decimals() external view returns (uint8);\\n\\n  function description() external view returns (string memory);\\n\\n  function version() external view returns (uint256);\\n\\n  function getRoundData(uint80 _roundId)\\n    external\\n    view\\n    returns (\\n      uint80 roundId,\\n      int256 answer,\\n      uint256 startedAt,\\n      uint256 updatedAt,\\n      uint80 answeredInRound\\n    );\\n\\n  function latestRoundData()\\n    external\\n    view\\n    returns (\\n      uint80 roundId,\\n      int256 answer,\\n      uint256 startedAt,\\n      uint256 updatedAt,\\n      uint80 answeredInRound\\n    );\\n}\\n\",\"keccak256\":\"0x6e6e4b0835904509406b070ee173b5bc8f677c19421b76be38aea3b1b3d30846\",\"license\":\"MIT\"},\"contracts/PriceConsumerV3.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.7;\\n\\nimport \\\"@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol\\\";\\n\\ncontract PriceConsumerV3 {\\n    AggregatorV3Interface internal priceFeed;\\n\\n    /**\\n     * Network: Ethereum Goerli\\n     * Aggregator: ETH/USD\\n     * Address: 0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e\\n     */\\n    constructor(address _priceFeedAddress) {\\n        priceFeed = AggregatorV3Interface(_priceFeedAddress);\\n    }\\n\\n    /**\\n     * Returns the latest price.\\n     */\\n    function getLatestPrice() public view returns (int, uint80) {\\n        // prettier-ignore\\n        (\\n            uint80 roundID,\\n            int price,\\n            /*uint startedAt*/,\\n            /*uint timeStamp*/,\\n            /*uint80 answeredInRound*/\\n        ) = priceFeed.latestRoundData();\\n        return (price, roundID);\\n    }\\n\\n    /**\\n     * Returns historical price for a round id.\\n     * roundId is NOT incremental. Not all roundIds are valid.\\n     * You must know a valid roundId before consuming historical data.\\n     *\\n     * @dev A timestamp with zero value means the round is not complete and should not be used.\\n     */\\n    function getHistoricalPrice(uint80 _roundId) public view returns (int256) {\\n        // prettier-ignore\\n        (\\n            /*uint80 roundID*/,\\n            int price,\\n            /*uint startedAt*/,\\n            uint timeStamp,\\n            /*uint80 answeredInRound*/\\n        ) = priceFeed.getRoundData(_roundId);\\n        require(timeStamp > 0, \\\"Round not complete\\\");\\n        return price;\\n    }\\n}\\n\",\"keccak256\":\"0x7648eac9fcef6b7315d440e2cde4e0faa927c7183e0eacf4a054e9ac92632f2e\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516105dd3803806105dd833981810160405281019061003291906100db565b806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050610108565b600080fd5b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b60006100a88261007d565b9050919050565b6100b88161009d565b81146100c357600080fd5b50565b6000815190506100d5816100af565b92915050565b6000602082840312156100f1576100f0610078565b5b60006100ff848285016100c6565b91505092915050565b6104c6806101176000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c80638e15f4731461003b578063eec377c01461005a575b600080fd5b61004361008a565b604051610051929190610264565b60405180910390f35b610074600480360381019061006f91906102be565b610132565b60405161008191906102eb565b60405180910390f35b60008060008060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663feaf968c6040518163ffffffff1660e01b815260040160a060405180830381865afa1580156100fb573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061011f919061037d565b5050509150915080829350935050509091565b60008060008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16639a6fc8f5856040518263ffffffff1660e01b815260040161019191906103f8565b60a060405180830381865afa1580156101ae573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101d2919061037d565b509350509250506000811161021c576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161021390610470565b60405180910390fd5b8192505050919050565b6000819050919050565b61023981610226565b82525050565b600069ffffffffffffffffffff82169050919050565b61025e8161023f565b82525050565b60006040820190506102796000830185610230565b6102866020830184610255565b9392505050565b600080fd5b61029b8161023f565b81146102a657600080fd5b50565b6000813590506102b881610292565b92915050565b6000602082840312156102d4576102d361028d565b5b60006102e2848285016102a9565b91505092915050565b60006020820190506103006000830184610230565b92915050565b60008151905061031581610292565b92915050565b61032481610226565b811461032f57600080fd5b50565b6000815190506103418161031b565b92915050565b6000819050919050565b61035a81610347565b811461036557600080fd5b50565b60008151905061037781610351565b92915050565b600080600080600060a086880312156103995761039861028d565b5b60006103a788828901610306565b95505060206103b888828901610332565b94505060406103c988828901610368565b93505060606103da88828901610368565b92505060806103eb88828901610306565b9150509295509295909350565b600060208201905061040d6000830184610255565b92915050565b600082825260208201905092915050565b7f526f756e64206e6f7420636f6d706c6574650000000000000000000000000000600082015250565b600061045a601283610413565b915061046582610424565b602082019050919050565b600060208201905081810360008301526104898161044d565b905091905056fea26469706673582212202aedb05beb67e781bf3e25cfe3b80214f52f0225875f53463f5373f17bef78ae64736f6c63430008110033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100365760003560e01c80638e15f4731461003b578063eec377c01461005a575b600080fd5b61004361008a565b604051610051929190610264565b60405180910390f35b610074600480360381019061006f91906102be565b610132565b60405161008191906102eb565b60405180910390f35b60008060008060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663feaf968c6040518163ffffffff1660e01b815260040160a060405180830381865afa1580156100fb573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061011f919061037d565b5050509150915080829350935050509091565b60008060008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16639a6fc8f5856040518263ffffffff1660e01b815260040161019191906103f8565b60a060405180830381865afa1580156101ae573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101d2919061037d565b509350509250506000811161021c576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161021390610470565b60405180910390fd5b8192505050919050565b6000819050919050565b61023981610226565b82525050565b600069ffffffffffffffffffff82169050919050565b61025e8161023f565b82525050565b60006040820190506102796000830185610230565b6102866020830184610255565b9392505050565b600080fd5b61029b8161023f565b81146102a657600080fd5b50565b6000813590506102b881610292565b92915050565b6000602082840312156102d4576102d361028d565b5b60006102e2848285016102a9565b91505092915050565b60006020820190506103006000830184610230565b92915050565b60008151905061031581610292565b92915050565b61032481610226565b811461032f57600080fd5b50565b6000815190506103418161031b565b92915050565b6000819050919050565b61035a81610347565b811461036557600080fd5b50565b60008151905061037781610351565b92915050565b600080600080600060a086880312156103995761039861028d565b5b60006103a788828901610306565b95505060206103b888828901610332565b94505060406103c988828901610368565b93505060606103da88828901610368565b92505060806103eb88828901610306565b9150509295509295909350565b600060208201905061040d6000830184610255565b92915050565b600082825260208201905092915050565b7f526f756e64206e6f7420636f6d706c6574650000000000000000000000000000600082015250565b600061045a601283610413565b915061046582610424565b602082019050919050565b600060208201905081810360008301526104898161044d565b905091905056fea26469706673582212202aedb05beb67e781bf3e25cfe3b80214f52f0225875f53463f5373f17bef78ae64736f6c63430008110033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "getHistoricalPrice(uint80)": {
+        "details": "A timestamp with zero value means the round is not complete and should not be used."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "constructor": {
+        "notice": "Network: Ethereum Goerli Aggregator: ETH/USD Address: 0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e"
+      },
+      "getHistoricalPrice(uint80)": {
+        "notice": "Returns historical price for a round id. roundId is NOT incremental. Not all roundIds are valid. You must know a valid roundId before consuming historical data."
+      },
+      "getLatestPrice()": {
+        "notice": "Returns the latest price."
+      }
+    },
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 51,
+        "contract": "contracts/PriceConsumerV3.sol:PriceConsumerV3",
+        "label": "priceFeed",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_contract(AggregatorV3Interface)45"
+      }
+    ],
+    "types": {
+      "t_contract(AggregatorV3Interface)45": {
+        "encoding": "inplace",
+        "label": "contract AggregatorV3Interface",
+        "numberOfBytes": "20"
+      }
+    }
+  }
+}
